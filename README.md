@@ -193,7 +193,22 @@ Options:
 
 ## Docker
 
-Build and run the benchmark in an isolated container:
+### Pull from GitHub Container Registry (recommended)
+
+```bash
+docker pull ghcr.io/ashok007-cmd/echoflow-voice-pipeline:latest
+
+# Run the offline benchmark
+docker run --rm ghcr.io/ashok007-cmd/echoflow-voice-pipeline:latest benchmark --turns 5 --mock
+
+# Run with API keys
+docker run --rm \
+  -e OPENAI_API_KEY=sk-... \
+  ghcr.io/ashok007-cmd/echoflow-voice-pipeline:latest \
+  benchmark --turns 10
+```
+
+### Build locally
 
 ```bash
 docker build -t echoflow .
