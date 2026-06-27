@@ -11,7 +11,7 @@ import logging
 import time
 from abc import ABC, abstractmethod
 from collections import deque
-from typing import AsyncGenerator, Optional
+from typing import AsyncGenerator
 
 from src.config import LLMBackend, LLMConfig
 from src.pipeline.models import LLMResponse

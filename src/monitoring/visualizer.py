@@ -6,11 +6,10 @@ to deconstruct the end-to-end latency budget.
 
 import logging
 from dataclasses import dataclass
-from typing import Optional
 
 import numpy as np
 
-from src.monitoring.latency_tracker import LatencySummary, LatencyTracker
+from src.monitoring.latency_tracker import LatencyTracker
 
 logger = logging.getLogger(__name__)
 

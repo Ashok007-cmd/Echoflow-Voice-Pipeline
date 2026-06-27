@@ -22,7 +22,6 @@ from src.monitoring.latency_tracker import LatencyTracker, PipelineTimer
 from src.resilience.circuit_breaker import (
     CircuitBreaker,
     CircuitBreakerConfig,
-    CircuitBreakerOpenError,
 )
 from src.resilience.degradation import DegradationManager, DegradationLevel
 from src.resilience.timeout import (

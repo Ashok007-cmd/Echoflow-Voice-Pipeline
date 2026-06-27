@@ -24,7 +24,7 @@ from src.resilience.circuit_breaker import (
     CircuitBreakerOpenError,
     CircuitState,
 )
-from src.resilience.degradation import DegradationManager, DegradationLevel, FallbackChain, FallbackResult
+from src.resilience.degradation import DegradationManager, DegradationLevel, FallbackChain
 from src.resilience.timeout import PipelineTimeoutError, TimeoutSettings
 from src.monitoring.latency_tracker import LatencyTracker, PipelineTimer
 
@@ -721,7 +721,7 @@ class TestLatencyVisualizer:
 
         # Simulate multiple turns
         for i in range(5):
-            turn = tracker.start_turn()
+            tracker.start_turn()
             with tracker.measure_stage("asr"):
                 pass
             with tracker.measure_stage("llm_time_to_first_token"):
@@ -982,7 +982,7 @@ class TestPipelineOrchestratorAdditional:
             return_value=TTSResult(text="Hello response.", is_final=True, error="TTS server down")
         )
         
-        with patch("click.style") as mock_style, patch("click.echo") as mock_echo:
+        with patch("click.style"), patch("click.echo"):
             res = await orchestrator.run_turn(b"\x00" * 3200, 16000)
             
         assert res is not None

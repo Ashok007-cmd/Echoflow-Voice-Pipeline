@@ -7,7 +7,7 @@ degrades gracefully during partial service outages.
 import logging
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Any, AsyncGenerator, Awaitable, Callable, Optional, TypeVar
+from typing import Any, Awaitable, Callable, Optional, TypeVar
 
 logger = logging.getLogger(__name__)
 

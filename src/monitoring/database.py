@@ -4,7 +4,6 @@ Uses a single persistent connection with WAL mode for concurrent read performanc
 and a background write queue so DB writes never block the real-time pipeline.
 """
 
-import asyncio
 import logging
 import os
 import sqlite3

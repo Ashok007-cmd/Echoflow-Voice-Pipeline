@@ -13,7 +13,6 @@ import time
 from abc import ABC, abstractmethod
 from typing import AsyncGenerator, Optional
 
-import numpy as np
 
 from src.config import TTSBackend, TTSConfig
 from src.pipeline.models import LLMResponse, TTSResult

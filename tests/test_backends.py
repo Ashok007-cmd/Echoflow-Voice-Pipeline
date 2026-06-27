@@ -1,14 +1,10 @@
 """Tests for ASR, LLM, and TTS backends."""
 
 import asyncio
-import io
 import os
 import sys
-import tempfile
-import time
 from unittest.mock import AsyncMock, MagicMock, patch
 
-import numpy as np
 import pytest
 
 # Mock optional heavy dependencies before import so tests run without [local] extras installed
@@ -25,24 +21,19 @@ sys.modules["torch"] = mock_torch
 mock_transformers = MagicMock()
 sys.modules["transformers"] = mock_transformers
 
-from src.config import ASRConfig, LLMConfig, TTSConfig, ASRBackend, LLMBackend, TTSBackend
-from src.pipeline.asr import (
+from src.config import ASRConfig, LLMConfig, TTSConfig, ASRBackend, LLMBackend, TTSBackend  # noqa: E402
+from src.pipeline.asr import (  # noqa: E402
     create_asr_engine,
-    GoogleASREngine,
-    OpenAIASREngine,
-    LocalWhisperASREngine,
 )
-from src.pipeline.llm_client import (
+from src.pipeline.llm_client import (  # noqa: E402
     create_llm_client,
-    OpenAILLMClient,
-    AnthropicLLMClient,
 )
-from src.pipeline.tts import (
+from src.pipeline.tts import (  # noqa: E402
     create_tts_engine,
     EdgeTTSEngine,
     Pyttsx3Engine,
 )
-from src.pipeline.models import AudioChunk, LLMResponse
+from src.pipeline.models import AudioChunk, LLMResponse  # noqa: E402
 
 
 # ═══════════════════════════════════════════════════════════════════

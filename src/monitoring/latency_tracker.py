@@ -9,7 +9,7 @@ import time
 from collections import defaultdict, deque
 from contextlib import asynccontextmanager, contextmanager
 from dataclasses import dataclass, field
-from typing import AsyncGenerator, Optional
+from typing import Optional
 
 import numpy as np
 
