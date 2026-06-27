@@ -39,4 +39,4 @@ jobs:
 
       - name: Run linter
         run: |
-          ruff check src/ tests/ || true
+          ruff check src/ tests/
