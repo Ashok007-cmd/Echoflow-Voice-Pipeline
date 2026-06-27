@@ -11,10 +11,19 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import numpy as np
 import pytest
 
-# Mock pyttsx3 before import to avoid ModuleNotFoundError on missing library environments
+# Mock optional heavy dependencies before import so tests run without [local] extras installed
 mock_pyttsx3 = MagicMock()
 mock_pyttsx3.init.return_value = MagicMock()
 sys.modules["pyttsx3"] = mock_pyttsx3
+
+mock_torch = MagicMock()
+mock_torch.cuda.is_available.return_value = False
+mock_torch.float32 = "float32"
+mock_torch.float16 = "float16"
+sys.modules["torch"] = mock_torch
+
+mock_transformers = MagicMock()
+sys.modules["transformers"] = mock_transformers
 
 from src.config import ASRConfig, LLMConfig, TTSConfig, ASRBackend, LLMBackend, TTSBackend
 from src.pipeline.asr import (
