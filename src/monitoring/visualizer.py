@@ -20,6 +20,7 @@ class VisualizationData:
     """Aggregated data ready for plotting."""
 
     stage_names: list[str]
+    stage_keys: list[str]  # raw stage keys (used for color lookup)
     mean_latencies: list[float]
     p50_latencies: list[float]
     p90_latencies: list[float]
@@ -77,9 +78,11 @@ class LatencyVisualizer:
             "end_to_end",
         ]
 
+        stage_keys = []
         for stage in ordered_stages:
             if stage in summary:
                 s = summary[stage]
+                stage_keys.append(stage)
                 stage_names.append(self.STAGE_LABELS.get(stage, stage))
                 mean_latencies.append(s.mean_ms)
                 p50_latencies.append(s.p50_ms)
@@ -100,6 +103,7 @@ class LatencyVisualizer:
 
         return VisualizationData(
             stage_names=stage_names,
+            stage_keys=stage_keys,
             mean_latencies=mean_latencies,
             p50_latencies=p50_latencies,
             p90_latencies=p90_latencies,
@@ -183,6 +187,7 @@ class LatencyVisualizer:
     def _plot_breakdown(self, ax, data: VisualizationData) -> None:
         """Panel 1: Average latency breakdown bar chart."""
         stages = data.stage_names[:-1]  # Exclude end-to-end
+        keys = data.stage_keys[:-1]     # Raw keys for color lookup
         means = data.mean_latencies[:-1]
         p90s = data.p90_latencies[:-1]
 
@@ -191,7 +196,7 @@ class LatencyVisualizer:
             return
 
         y_pos = np.arange(len(stages))
-        bars = ax.barh(y_pos, means, color=[self.STAGE_COLORS.get(s, "#999") for s in stages])
+        bars = ax.barh(y_pos, means, color=[self.STAGE_COLORS.get(k, "#999") for k in keys])
 
         # Add error bars (P90 as marker)
         for i, (bar, mean, p90) in enumerate(zip(bars, means, p90s)):

@@ -212,9 +212,13 @@ class PipelineOrchestrator:
         return TranscriptionResult(text="", is_final=True, error=f"All ASR backends failed. Last error: {last_error}")
 
     async def _execute_llm_stream(self, user_text: str) -> AsyncGenerator[LLMResponse, None]:
-        """Execute LLM streaming with the configured primary backend."""
+        """Execute LLM streaming with fallback chain support."""
         primary = self.config.llm.backend
         backends = [primary]
+        if not self._is_testing:
+            for b in [LLMBackend.OPENAI, LLMBackend.ANTHROPIC, LLMBackend.MOCK]:
+                if b != primary:
+                    backends.append(b)
             
         last_error = None
         for backend in backends:
@@ -347,6 +351,12 @@ class PipelineOrchestrator:
         if self.state.degradation_mode and self.state.current_turn == 0:
             logger.warning("Pipeline is in degradation mode, skipping turn")
             return None
+
+        # Guard against absurdly large audio blobs (max 10 MB / ~312 s at 16 kHz mono 16-bit)
+        max_audio_bytes = 10 * 1024 * 1024
+        if len(audio_data) > max_audio_bytes:
+            logger.warning(f"Audio input too large ({len(audio_data)} bytes); truncating to {max_audio_bytes} bytes")
+            audio_data = audio_data[:max_audio_bytes]
 
         self.state.current_turn += 1
         turn_number = self.latency_tracker.start_turn()

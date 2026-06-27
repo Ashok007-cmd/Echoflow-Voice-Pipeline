@@ -14,9 +14,14 @@ except ImportError:
         with open(".env") as f:
             for line in f:
                 line = line.strip()
-                if line and not line.startswith("#") and "=" in line:
-                    k, v = line.split("=", 1)
-                    os.environ[k.strip()] = v.strip().strip('"').strip("'")
+                if not line or line.startswith("#") or "=" not in line:
+                    continue
+                k, v = line.split("=", 1)
+                # Strip inline comments (e.g. KEY=value # comment)
+                v = v.split("#")[0].strip().strip('"').strip("'")
+                key = k.strip()
+                if key and key.isidentifier():
+                    os.environ[key] = v
 
 
 

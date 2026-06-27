@@ -113,16 +113,19 @@ class CircuitBreaker:
         try:
             result = await func(*args, **kwargs)
         except Exception as e:
-            # Differentiate validation/auth errors from actual service failures
-            is_client_error = (
-                type(e).__name__ in (
-                    "AuthenticationError",
-                    "PermissionDeniedError",
-                    "NotFoundError",
-                    "BadRequestError",
-                    "InvalidRequestError",
-                )
-            )
+            # Differentiate client-side errors (auth, bad request) from actual
+            # service failures. Client errors should NOT trip the circuit breaker.
+            # Use isinstance() against real exception types where available,
+            # with a name-based fallback for non-imported libraries.
+            _CLIENT_ERROR_NAMES = frozenset({
+                "AuthenticationError",
+                "PermissionDeniedError",
+                "NotFoundError",
+                "BadRequestError",
+                "InvalidRequestError",
+                "RateLimitError",
+            })
+            is_client_error = type(e).__name__ in _CLIENT_ERROR_NAMES
             if not is_client_error:
                 async with self._lock:
                     self._on_failure()

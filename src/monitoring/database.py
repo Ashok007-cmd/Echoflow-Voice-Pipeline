@@ -16,7 +16,10 @@ from src.pipeline.models import TurnMetrics
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_DB_PATH = "latency_metrics.db"
+DEFAULT_DB_PATH = os.environ.get(
+    "ECHOFLOW_DB_PATH",
+    os.path.join(os.path.expanduser("~"), ".local", "share", "echoflow", "metrics.db"),
+)
 
 _CREATE_TABLE = """
     CREATE TABLE IF NOT EXISTS turn_metrics (
@@ -62,6 +65,7 @@ class MetricsDatabase:
 
     def __init__(self, db_path: str = DEFAULT_DB_PATH):
         self.db_path = db_path
+        os.makedirs(os.path.dirname(db_path), exist_ok=True)
         self._queue: Queue = Queue()
         self._writer_thread = threading.Thread(
             target=self._writer_loop,

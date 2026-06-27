@@ -802,6 +802,7 @@ class TestLatencyVisualizerAdditional:
         
         data = VisualizationData(
             stage_names=[],
+            stage_keys=[],
             mean_latencies=[],
             p50_latencies=[],
             p90_latencies=[],
@@ -819,9 +820,10 @@ class TestLatencyVisualizerAdditional:
         viz = LatencyVisualizer(tracker)
         import matplotlib.pyplot as plt
         fig, ax = plt.subplots()
-        
+
         data = VisualizationData(
             stage_names=["ASR"],
+            stage_keys=["asr"],
             mean_latencies=[10.0],
             p50_latencies=[10.0],
             p90_latencies=[10.0],
@@ -839,9 +841,10 @@ class TestLatencyVisualizerAdditional:
         viz = LatencyVisualizer(tracker)
         import matplotlib.pyplot as plt
         fig, ax = plt.subplots()
-        
+
         data = VisualizationData(
             stage_names=[],
+            stage_keys=[],
             mean_latencies=[],
             p50_latencies=[],
             p90_latencies=[],
