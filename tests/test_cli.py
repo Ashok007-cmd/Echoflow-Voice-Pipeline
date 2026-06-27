@@ -3,7 +3,6 @@
 import os
 from unittest.mock import AsyncMock, MagicMock, patch
 import pandas as pd
-import pytest
 from click.testing import CliRunner
 
 from src.main import cli
